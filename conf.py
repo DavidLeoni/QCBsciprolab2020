@@ -21,7 +21,7 @@ on_rtd = os.environ.get('READTHEDOCS') == 'True'
 jm = jmt.Jupman()
 
 # TODO CHANGE
-jm.subtitle = "The webpage of the Scientific Programming Lab for QCB 2020""" 
+jm.subtitle = "The webpage of the Scientific Programming Lab for QCB 2021""" 
 jm.course = "Scientific Programming" # TODO CHANGE
 jm.degree = "QCB" # TODO CHANGE
 author = 'Luca Bianco' # TODO CHANGE
@@ -33,7 +33,7 @@ copyright = '# 2020 - %s, %s' % (datetime.datetime.now().year, author)
 #####     AND IT SHOULD ALSO BE THE SAME NAME ON READTHEDOCS 
 #####     (like i.e. jupman.readthedocs.org)
 
-jm.filename = 'jupman'   # The filename without the extension
+jm.filename = 'sciprog-qcb'   # The filename without the extension
 
 # common files for exercise and exams as paths. Paths are intended relative to the project root. Globs like /**/* are allowed.
 
@@ -46,26 +46,26 @@ jm.chapter_files = ['jupman.py', 'my_lib.py', '_static/img/cc-by.png',
                     '_static/js/pytutor-embed.bundle.min.js',]
 
 jm.chapter_patterns =  ['*/']
-jm.chapter_exclude_patterns =  ['[^_]*/','exams/', 'project/','file_samples/', 'material/','docs/','img/']
+jm.chapter_exclude_patterns =  ['[^_]*/','exams/', 'project/','file_samples/', 'material/','docs/','img/', 'docs/']
 
 # words used in ipynb files - you might want to translate these in your language. Use plural.
 jm.ipynb_solutions = "SOLUTIONS"
 jm.ipynb_exercises = "EXERCISES"
 
-#NOTE: the following string is not just a translation, it's also a command that   when building the exercises
+#NOTE: this string is not just a translation, it's also a command that when building the exercises
 #      removes the content after it in the Python cell it is contained in
 #      If the user inserts extra spaces the phrase will be recognized anyway
-jm.write_solution_here = jmt.ignore_spaces("# write here", must_begin=False)
+jm.write_solution_here = jmt.tag_regex("# write here", must_begin=False, preserve_line=True)
 
-#NOTE: the following string is not just a translation, it's also a command that  when building the exercises  completely removes the content of the python cell it is contained in (solution comment included). If the user inserts extra spaces the phrase will be recognized anyway
+#NOTE: this string is not just a translation, it's also a command that when building the exercises  
+# completely removes the content of the python cell it is contained in (solution comment included). 
+# If the user inserts extra spaces the phrase will be recognized anyway
+jm.solution = jmt.tag_regex("# SOLUTION")
 
-jm.solution = jmt.ignore_spaces("# SOLUTION")
-
-#NOTE: the following string is not just a translation, it's also a command that 
+#NOTE: this string is not just a translation, it's also a command that 
 #   when building the exercises removes the content after it in the markdown cell
 #   it is contained in
-
-jm.markdown_answer = jmt.ignore_spaces('**ANSWER**:')
+jm.markdown_answer = jmt.tag_regex('**ANSWER**:')
 #################################################################
 
 jm.zip_ignored = ['__pycache__', '**.ipynb_checkpoints', '.pyc', '.cache', '.pytest_cache', '.vscode']
@@ -78,7 +78,7 @@ jm.build = "_build"
 
 jm.manuals = {
     "student": {
-        "name" : "Jupman",  # TODO put manual name, like "Scientific Programming"
+        "name" : "QCB Scientific Programming Lab",  # TODO put manual name, like "Scientific Programming"
         "audience" : "studenti",
         "args" : "",
         "output" : ""
@@ -429,6 +429,8 @@ pdf_use_numbered_links = False
 pdf_fit_background_mode = 'scale'
 
 def setup(app):
+    jmt.init(jm, globals())
+
     
     app.add_config_value(   'recommonmark_config', {
                                 'auto_toc_tree_section': 'Contents',
@@ -439,6 +441,7 @@ def setup(app):
         jm.zip_folder(folder)
     jm.zip_folders('exams/*/solutions', 
                     lambda x:  '%s-%s-exam' % (jm.filename, x.split('/')[-2]))
+    """
     # Build Project
     def sub(x):
         if x == 'requirements.txt':
@@ -451,7 +454,7 @@ def setup(app):
     jm.zip_paths(['project', 'requirements.txt'], 
                     '_static/generated/project-template',
                     patterns = sub)
-    
+    """
 
 source_suffix = {
     '.rst': 'restructuredtext',
